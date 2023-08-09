@@ -39,7 +39,7 @@ class Trip : Object {
 class Swift_benchmarksTests: XCTestCase {
     
     func GetTaxiFileName() -> String {
-        return "/Users/tomebergen/Swift-benchmarks/taxi-one-month.csv"
+        return "/Users/tomebergen/Swift-benchmarks/taxi-one-month-subset.csv"
     }
     
     func readCSV(inputFile: String, separator: String) -> [String] {
@@ -132,7 +132,9 @@ class Swift_benchmarksTests: XCTestCase {
 
     // test how fast
     func testRealmInsertRecords() throws {
-        // Measure performance of inserting all parsed data into Realm database
+        // Measure performance of reading the csv in swift
+        // loading it into a realm db
+        // then deleting it from the same realm db
         self.measure {
             let realm_filename = "realm-benchmark"
             var config = Realm.Configuration.defaultConfiguration
@@ -173,14 +175,41 @@ extension Swift_benchmarksTests {
         // Measure performance of inserting all parsed data into Realm database
         print("starting duckdb test")
         self.measure {
+            // measure performance of reading a csv into a duckdb instance
+            // and dropping all the records.
             do {
                 let database = try Database(store: .inMemory)
                 let connection = try database.connect()
+                
                 try connection.execute("Create Table trips as (select * from read_csv_auto('\(GetTaxiFileName())'))")
                 // check amount
                 let result = try connection.query("""
                   Select * from trips;
                 """)
+                
+                let vendor_name = result[0].cast(to: String.self)
+                let passenger_count   = result[1].cast(to: Int.self)
+                let trip_distance   = result[2].cast(to: Double.self)
+                let pickup_longitude   = result[3].cast(to: Double.self)
+                let pickup_latitude   = result[4].cast(to: Double.self)
+                let rate_code   = result[5].cast(to: String.self)
+                let store_and_fwd   = result[6].cast(to: String.self)
+                let dropoff_longitude   = result[7].cast(to: Double.self)
+                let dropoff_latitude   = result[8].cast(to: Double.self)
+                let payment_type   = result[9].cast(to: String.self)
+                let fare_amount   = result[10].cast(to: Double.self)
+                let extra   = result[11].cast(to: Double.self)
+                let mta_tax   = result[12].cast(to: Double.self)
+                let tip_amount   = result[13].cast(to: Double.self)
+                let tolls_amount   = result[14].cast(to: Double.self)
+                let total_amount   = result[15].cast(to: Double.self)
+                let improvement_surcharge   = result[16].cast(to: Double.self)
+                let congestion_surcharge   = result[17].cast(to: Double.self)
+                let pickup_location_id   = result[18].cast(to: Int.self)
+                let dropoff_location_id   = result[19].cast(to: Int.self)
+                let year   = result[20].cast(to: String.self)
+                let month   = result[21].cast(to: String.self)
+                
                 if (result.rowCount != 6873314) {
                     print("error during DUCKDB importing. Counts don't match")
                 }

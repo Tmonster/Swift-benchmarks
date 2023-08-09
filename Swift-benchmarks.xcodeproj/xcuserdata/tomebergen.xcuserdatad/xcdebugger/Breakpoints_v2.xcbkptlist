@@ -14,8 +14,8 @@
             filePath = "Swift-benchmarksTests/Swift_benchmarksTests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
             landmarkName = "testDuckdbCSVRead()"
             landmarkType = "7">
          </BreakpointContent>
