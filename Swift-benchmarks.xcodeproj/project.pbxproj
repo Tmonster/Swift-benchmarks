@@ -11,6 +11,10 @@
 		29941F2F2A827ACF007A59F2 /* Swift_benchmarks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29941F242A827ACF007A59F2 /* Swift_benchmarks.framework */; };
 		29941F342A827ACF007A59F2 /* Swift_benchmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29941F332A827ACF007A59F2 /* Swift_benchmarksTests.swift */; };
 		29941F352A827ACF007A59F2 /* Swift_benchmarks.h in Headers */ = {isa = PBXBuildFile; fileRef = 29941F272A827ACF007A59F2 /* Swift_benchmarks.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		29941F402A827E82007A59F2 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 29941F3F2A827E82007A59F2 /* Realm */; };
+		29941F422A827E82007A59F2 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 29941F412A827E82007A59F2 /* RealmSwift */; };
+		29941F452A827EB8007A59F2 /* DuckDB in Frameworks */ = {isa = PBXBuildFile; productRef = 29941F442A827EB8007A59F2 /* DuckDB */; };
+		29941F482A828246007A59F2 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 29941F472A828246007A59F2 /* SQLite */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +40,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				29941F482A828246007A59F2 /* SQLite in Frameworks */,
+				29941F422A827E82007A59F2 /* RealmSwift in Frameworks */,
+				29941F402A827E82007A59F2 /* Realm in Frameworks */,
+				29941F452A827EB8007A59F2 /* DuckDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,6 +121,12 @@
 			dependencies = (
 			);
 			name = "Swift-benchmarks";
+			packageProductDependencies = (
+				29941F3F2A827E82007A59F2 /* Realm */,
+				29941F412A827E82007A59F2 /* RealmSwift */,
+				29941F442A827EB8007A59F2 /* DuckDB */,
+				29941F472A828246007A59F2 /* SQLite */,
+			);
 			productName = "Swift-benchmarks";
 			productReference = 29941F242A827ACF007A59F2 /* Swift_benchmarks.framework */;
 			productType = "com.apple.product-type.framework";
@@ -162,6 +176,11 @@
 				Base,
 			);
 			mainGroup = 29941F1A2A827ACF007A59F2;
+			packageReferences = (
+				29941F3E2A827E82007A59F2 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				29941F432A827EB8007A59F2 /* XCRemoteSwiftPackageReference "duckdb-swift" */,
+				29941F462A828246007A59F2 /* XCRemoteSwiftPackageReference "SQLite" */,
+			);
 			productRefGroup = 29941F252A827ACF007A59F2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -479,6 +498,56 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		29941F3E2A827E82007A59F2 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		29941F432A827EB8007A59F2 /* XCRemoteSwiftPackageReference "duckdb-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/duckdb/duckdb-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.8.1;
+			};
+		};
+		29941F462A828246007A59F2 /* XCRemoteSwiftPackageReference "SQLite" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.14.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		29941F3F2A827E82007A59F2 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 29941F3E2A827E82007A59F2 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		29941F412A827E82007A59F2 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 29941F3E2A827E82007A59F2 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		29941F442A827EB8007A59F2 /* DuckDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 29941F432A827EB8007A59F2 /* XCRemoteSwiftPackageReference "duckdb-swift" */;
+			productName = DuckDB;
+		};
+		29941F472A828246007A59F2 /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 29941F462A828246007A59F2 /* XCRemoteSwiftPackageReference "SQLite" */;
+			productName = SQLite;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 29941F1B2A827ACF007A59F2 /* Project object */;
 }
