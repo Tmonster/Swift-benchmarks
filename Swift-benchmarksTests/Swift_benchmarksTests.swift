@@ -9,11 +9,12 @@ import XCTest
 
 import RealmSwift
 import DuckDB
+import SQLite
 import CoreData
 
 @testable import Swift_benchmarks
 
-class Trip : Object {
+class RealmTrip : Object {
     @objc var vendor_name           : String = ""
     @objc var passenger_count       : Int = 0
     @objc var trip_distance         : Double = 0
@@ -59,13 +60,13 @@ class Swift_benchmarksTests: XCTestCase {
     override func setUpWithError() throws {
         // do nothing
     }
-
-    func loadRealmData() throws -> [Trip] {
+    
+    func loadRealmData() throws -> [RealmTrip] {
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        var parsed_data : [Trip] = []
+        var parsed_data : [RealmTrip] = []
         let all_data = readCSV(inputFile: GetTaxiFileName(), separator: ",")
         for row in all_data {
-            var trip = Trip()
+            var trip = RealmTrip()
             let parsed_row = row.components(separatedBy: ",")
             if (parsed_row.count < 24) {
                 // empty row probably
@@ -112,7 +113,7 @@ class Swift_benchmarksTests: XCTestCase {
         }
         
         // Delete the objects currenlty in the realm db
-        let allTrips = realm_connection.objects(Trip.self)
+        let allTrips = realm_connection.objects(RealmTrip.self)
         try! realm_connection.write {
             realm_connection.delete(allTrips)
         }
@@ -153,7 +154,7 @@ class Swift_benchmarksTests: XCTestCase {
                     realm_connection.add(parsed_data)
                 }
                 // delete the objects as well
-                let allTrips = realm_connection.objects(Trip.self)
+                let allTrips = realm_connection.objects(RealmTrip.self)
                 if (allTrips.count != parsed_data.count) {
                     print("FAILURE")
                     exit(1)
@@ -226,49 +227,107 @@ extension Swift_benchmarksTests {
 
 
 extension Swift_benchmarksTests {
-    func testCoreDataImport() throws {
+    
+    func testSQLiteImport() throws {
         // Measure performance of inserting all parsed data into Realm database
-        print("starting duckdb test")
+        print("starting sqlitetest test")
         self.measure {
             // measure performance of reading a csv into a duckdb instance
             // and dropping all the records.
             do {
-                let database = try Database(store: .inMemory)
-                let connection = try database.connect()
+                let database = try Connection("/Users/tomebergen/Swift-benchmarks/trips.sqlite3")
+                let trips = Table("Trips")
                 
-                try connection.execute("Create Table trips as (select * from read_csv_auto('\(GetTaxiFileName())'))")
-                // check amount
-                let result = try connection.query("""
-                  Select * from trips;
-                """)
+                let vendor_name = Expression<String>("vendor_name")
+                let passenger_count = Expression<Int>("passenger_count")
+                let trip_distance = Expression<Double>("trip_distance")
+                let pickup_longitude = Expression<Double>("pickup_longitude")
+                let pickup_latitude = Expression<Double>("pickup_latitude")
+                let rate_code = Expression<String>("rate_code")
+                let store_and_fwd = Expression<String>("store_and_fwd")
+                let dropoff_longitude = Expression<Double>("dropoff_longitude")
+                let dropoff_latitude = Expression<Double>("dropoff_latitude")
+                let payment_type = Expression<String>("payment_type")
+                let fare_amount = Expression<Double>("fare_amount")
+                let extra = Expression<Double>("extra")
+                let mta_tax = Expression<Double>("mta_tax")
+                let tip_amount = Expression<Double>("tip_amount")
+                let tolls_amount = Expression<Double>("tolls_amount")
+                let total_amount = Expression<Double>("total_amount")
+                let improvement_surcharge = Expression<Double>("improvement_surcharge")
+                let congestion_surcharge = Expression<Double>("congestion_surcharge")
+                let pickup_location_id = Expression<Int>("pickup_location_id")
+                let dropoff_location_id = Expression<Int>("dropoff_location_id")
+                let year = Expression<Int>("year")
+                let month = Expression<Int>("month")
                 
-                let _ = result[0].cast(to: String.self) // vendor_name
-                let _ = result[3].cast(to: Int.self) // passenger_count
-                let _ = result[4].cast(to: Double.self) // trip_distance
-                let _ = result[5].cast(to: String.self) // pickup_longitude
-                let _ = result[6].cast(to: String.self) // pickup_latitude
-                let _ = result[7].cast(to: String.self) // rate_code
-                let _ = result[8].cast(to: String.self) // store_and_fwd
-                let _ = result[9].cast(to: String.self) // dropoff_longitude
-                let _ = result[10].cast(to: String.self) // dropoff_latitude
-                let _ = result[11].cast(to: String.self) // payment_type
-                let _ = result[12].cast(to: Double.self) // fare_amount
-                let _ = result[13].cast(to: Double.self) // extra
-                let _ = result[14].cast(to: Double.self) // mta_tax
-                let _ = result[15].cast(to: Double.self) // tip_amount
-                let _ = result[16].cast(to: Double.self) // tolls_amount
-                let _ = result[17].cast(to: Double.self) // total_amount
-                let _ = result[18].cast(to: Double.self) // improvement_surcharge
-                let _ = result[19].cast(to: Double.self) // congestion_surcharge
-                let _ = result[20].cast(to: Int.self) // pickup_location_id
-                let _ = result[21].cast(to: Int.self) // dropoff_location_id
-                let _ = result[22].cast(to: Int.self) // year
-                let _ = result[23].cast(to: Int.self) // month
+                try database.run(trips.create { trip in
+                    trip.column(vendor_name)
+                    trip.column(passenger_count)
+                    trip.column(trip_distance)
+                    trip.column(pickup_longitude)
+                    trip.column(pickup_latitude)
+                    trip.column(rate_code)
+                    trip.column(store_and_fwd)
+                    trip.column(dropoff_longitude)
+                    trip.column(dropoff_latitude)
+                    trip.column(payment_type)
+                    trip.column(fare_amount)
+                    trip.column(extra)
+                    trip.column(mta_tax)
+                    trip.column(tip_amount)
+                    trip.column(tolls_amount)
+                    trip.column(total_amount)
+                    trip.column(improvement_surcharge)
+                    trip.column(congestion_surcharge)
+                    trip.column(pickup_location_id)
+                    trip.column(dropoff_location_id)
+                    trip.column(year)
+                    trip.column(month)
+                })
                 
-                if (result.rowCount != 50000) {
-                    print("error during DUCKDB importing. Counts don't match")
+                let all_data = readCSV(inputFile: GetTaxiFileName(), separator: ",")
+                for row in all_data {
+                    let parsed_row = row.components(separatedBy: ",")
+                    if (parsed_row.count < 24) {
+                        // empty row probably
+                        break
+                    }
+                    let insert = trips.insert(
+                        vendor_name           <- String(parsed_row[0]),
+                        // pickup_datetime       <- Time.init(Date(parsed_row[1])),
+                        // dropoff_datetime      <- Time.init(Date(parsed_row[2])),
+                        passenger_count       <- Int(parsed_row[3]) ?? 0,
+                        trip_distance         <- Double(parsed_row[4]) ?? 0,
+                        pickup_longitude      <- Double(parsed_row[5]) ?? 0,
+                        pickup_latitude       <- Double(parsed_row[6]) ?? 0,
+                        rate_code             <- String(parsed_row[7]),
+                        store_and_fwd         <- String(parsed_row[8]),
+                        dropoff_longitude     <- Double(parsed_row[9]) ?? 0,
+                        dropoff_latitude      <- Double(parsed_row[10]) ?? 0,
+                        payment_type          <- String(parsed_row[11]),
+                        fare_amount           <- Double(parsed_row[12]) ?? 0,
+                        extra                 <- Double(parsed_row[13]) ?? 0,
+                        mta_tax               <- Double(parsed_row[14]) ?? 0,
+                        tip_amount            <- Double(parsed_row[15]) ?? 0,
+                        tolls_amount          <- Double(parsed_row[16]) ?? 0,
+                        total_amount          <- Double(parsed_row[17]) ?? 0,
+                        improvement_surcharge <- Double(parsed_row[18]) ?? 0,
+                        congestion_surcharge  <- Double(parsed_row[19]) ?? 0,
+                        pickup_location_id    <- Int(parsed_row[20]) ?? 0,
+                        dropoff_location_id   <- Int(parsed_row[21]) ?? 0,
+                        year                  <- Int(parsed_row[22]) ?? 0,
+                        month                 <- Int(parsed_row[23]) ?? 0
+                    )
+                    let rowid = try database.run(insert)
                 }
-                try connection.execute("drop table trips;")
+                // check the count
+                if (try database.scalar(trips.count) != 50000) {
+                    print("error during sqlite3 ingestion")
+                }
+                // drop the table
+                let result = trips.drop(ifExists: true)
+                
             } catch {
                 print("duckdb error \(error)")
                 exit(1)

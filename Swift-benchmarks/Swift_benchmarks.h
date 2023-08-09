@@ -14,5 +14,6 @@ FOUNDATION_EXPORT double Swift_benchmarksVersionNumber;
 FOUNDATION_EXPORT const unsigned char Swift_benchmarksVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <Swift_benchmarks/PublicHeader.h>
+#import <Swift_benchmarks/PublicHeader.h>
 
-
+#import <Swift_benchmarks-Swift.h>
