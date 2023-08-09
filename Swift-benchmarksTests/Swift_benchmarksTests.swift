@@ -6,8 +6,10 @@
 //
 import Foundation
 import XCTest
+
 import RealmSwift
 import DuckDB
+import CoreData
 
 @testable import Swift_benchmarks
 
@@ -131,7 +133,7 @@ class Swift_benchmarksTests: XCTestCase {
     }
 
     // test how fast
-    func testRealmInsertRecords() throws {
+    func testRealmImport() throws {
         // Measure performance of reading the csv in swift
         // loading it into a realm db
         // then deleting it from the same realm db
@@ -171,7 +173,60 @@ class Swift_benchmarksTests: XCTestCase {
 
 
 extension Swift_benchmarksTests {
-    func testDuckdbCSVRead() throws {
+    func testDuckDBImport() throws {
+        // Measure performance of inserting all parsed data into Realm database
+        print("starting duckdb test")
+        self.measure {
+            // measure performance of reading a csv into a duckdb instance
+            // and dropping all the records.
+            do {
+                let database = try Database(store: .inMemory)
+                let connection = try database.connect()
+                
+                try connection.execute("Create Table trips as (select * from read_csv_auto('\(GetTaxiFileName())'))")
+                // check amount
+                let result = try connection.query("""
+                  Select * from trips;
+                """)
+                
+                let _ = result[0].cast(to: String.self) // vendor_name
+                let _ = result[3].cast(to: Int.self) // passenger_count
+                let _ = result[4].cast(to: Double.self) // trip_distance
+                let _ = result[5].cast(to: String.self) // pickup_longitude
+                let _ = result[6].cast(to: String.self) // pickup_latitude
+                let _ = result[7].cast(to: String.self) // rate_code
+                let _ = result[8].cast(to: String.self) // store_and_fwd
+                let _ = result[9].cast(to: String.self) // dropoff_longitude
+                let _ = result[10].cast(to: String.self) // dropoff_latitude
+                let _ = result[11].cast(to: String.self) // payment_type
+                let _ = result[12].cast(to: Double.self) // fare_amount
+                let _ = result[13].cast(to: Double.self) // extra
+                let _ = result[14].cast(to: Double.self) // mta_tax
+                let _ = result[15].cast(to: Double.self) // tip_amount
+                let _ = result[16].cast(to: Double.self) // tolls_amount
+                let _ = result[17].cast(to: Double.self) // total_amount
+                let _ = result[18].cast(to: Double.self) // improvement_surcharge
+                let _ = result[19].cast(to: Double.self) // congestion_surcharge
+                let _ = result[20].cast(to: Int.self) // pickup_location_id
+                let _ = result[21].cast(to: Int.self) // dropoff_location_id
+                let _ = result[22].cast(to: Int.self) // year
+                let _ = result[23].cast(to: Int.self) // month
+                
+                if (result.rowCount != 50000) {
+                    print("error during DUCKDB importing. Counts don't match")
+                }
+                try connection.execute("drop table trips;")
+            } catch {
+                print("duckdb error \(error)")
+                exit(1)
+            }
+        }
+    }
+}
+
+
+extension Swift_benchmarksTests {
+    func testCoreDataImport() throws {
         // Measure performance of inserting all parsed data into Realm database
         print("starting duckdb test")
         self.measure {

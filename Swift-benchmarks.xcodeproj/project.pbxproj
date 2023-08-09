@@ -15,6 +15,8 @@
 		29941F422A827E82007A59F2 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 29941F412A827E82007A59F2 /* RealmSwift */; };
 		29941F452A827EB8007A59F2 /* DuckDB in Frameworks */ = {isa = PBXBuildFile; productRef = 29941F442A827EB8007A59F2 /* DuckDB */; };
 		29941F482A828246007A59F2 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 29941F472A828246007A59F2 /* SQLite */; };
+		29AF31D02A83ADB500DA17D9 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 29AF31CE2A83ADB500DA17D9 /* Model.xcdatamodeld */; };
+		29AF31D12A83ADB500DA17D9 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 29AF31CE2A83ADB500DA17D9 /* Model.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +35,7 @@
 		29941F282A827ACF007A59F2 /* Swift_benchmarks.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = Swift_benchmarks.docc; sourceTree = "<group>"; };
 		29941F2E2A827ACF007A59F2 /* Swift-benchmarksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Swift-benchmarksTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		29941F332A827ACF007A59F2 /* Swift_benchmarksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swift_benchmarksTests.swift; sourceTree = "<group>"; };
+		29AF31CF2A83ADB500DA17D9 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +64,7 @@
 		29941F1A2A827ACF007A59F2 = {
 			isa = PBXGroup;
 			children = (
+				29AF31CE2A83ADB500DA17D9 /* Model.xcdatamodeld */,
 				29941F262A827ACF007A59F2 /* Swift-benchmarks */,
 				29941F322A827ACF007A59F2 /* Swift-benchmarksTests */,
 				29941F252A827ACF007A59F2 /* Products */,
@@ -214,6 +218,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				29941F292A827ACF007A59F2 /* Swift_benchmarks.docc in Sources */,
+				29AF31D02A83ADB500DA17D9 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				29941F342A827ACF007A59F2 /* Swift_benchmarksTests.swift in Sources */,
+				29AF31D12A83ADB500DA17D9 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -548,6 +554,19 @@
 			productName = SQLite;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		29AF31CE2A83ADB500DA17D9 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				29AF31CF2A83ADB500DA17D9 /* Model.xcdatamodel */,
+			);
+			currentVersion = 29AF31CF2A83ADB500DA17D9 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 29941F1B2A827ACF007A59F2 /* Project object */;
 }
