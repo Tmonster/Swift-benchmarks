@@ -187,30 +187,30 @@ extension Swift_benchmarksTests {
                   Select * from trips;
                 """)
                 
-                let vendor_name = result[0].cast(to: String.self)
-                let passenger_count   = result[1].cast(to: Int.self)
-                let trip_distance   = result[2].cast(to: Double.self)
-                let pickup_longitude   = result[3].cast(to: Double.self)
-                let pickup_latitude   = result[4].cast(to: Double.self)
-                let rate_code   = result[5].cast(to: String.self)
-                let store_and_fwd   = result[6].cast(to: String.self)
-                let dropoff_longitude   = result[7].cast(to: Double.self)
-                let dropoff_latitude   = result[8].cast(to: Double.self)
-                let payment_type   = result[9].cast(to: String.self)
-                let fare_amount   = result[10].cast(to: Double.self)
-                let extra   = result[11].cast(to: Double.self)
-                let mta_tax   = result[12].cast(to: Double.self)
-                let tip_amount   = result[13].cast(to: Double.self)
-                let tolls_amount   = result[14].cast(to: Double.self)
-                let total_amount   = result[15].cast(to: Double.self)
-                let improvement_surcharge   = result[16].cast(to: Double.self)
-                let congestion_surcharge   = result[17].cast(to: Double.self)
-                let pickup_location_id   = result[18].cast(to: Int.self)
-                let dropoff_location_id   = result[19].cast(to: Int.self)
-                let year   = result[20].cast(to: String.self)
-                let month   = result[21].cast(to: String.self)
+                let _ = result[0].cast(to: String.self) // vendor_name
+                let _ = result[3].cast(to: Int.self) // passenger_count
+                let _ = result[4].cast(to: Double.self) // trip_distance
+                let _ = result[5].cast(to: String.self) // pickup_longitude
+                let _ = result[6].cast(to: String.self) // pickup_latitude
+                let _ = result[7].cast(to: String.self) // rate_code
+                let _ = result[8].cast(to: String.self) // store_and_fwd
+                let _ = result[9].cast(to: String.self) // dropoff_longitude
+                let _ = result[10].cast(to: String.self) // dropoff_latitude
+                let _ = result[11].cast(to: String.self) // payment_type
+                let _ = result[12].cast(to: Double.self) // fare_amount
+                let _ = result[13].cast(to: Double.self) // extra
+                let _ = result[14].cast(to: Double.self) // mta_tax
+                let _ = result[15].cast(to: Double.self) // tip_amount
+                let _ = result[16].cast(to: Double.self) // tolls_amount
+                let _ = result[17].cast(to: Double.self) // total_amount
+                let _ = result[18].cast(to: Double.self) // improvement_surcharge
+                let _ = result[19].cast(to: Double.self) // congestion_surcharge
+                let _ = result[20].cast(to: Int.self) // pickup_location_id
+                let _ = result[21].cast(to: Int.self) // dropoff_location_id
+                let _ = result[22].cast(to: Int.self) // year
+                let _ = result[23].cast(to: Int.self) // month
                 
-                if (result.rowCount != 6873314) {
+                if (result.rowCount != 50000) {
                     print("error during DUCKDB importing. Counts don't match")
                 }
                 try connection.execute("drop table trips;")
