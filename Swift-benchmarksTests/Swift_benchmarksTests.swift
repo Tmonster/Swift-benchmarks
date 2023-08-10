@@ -10,7 +10,6 @@ import XCTest
 import RealmSwift
 import DuckDB
 import SQLite
-import CoreData
 
 @testable import Swift_benchmarks
 
@@ -230,8 +229,8 @@ extension Swift_benchmarksTests {
     
     func testSQLiteImport() throws {
         // Measure performance of inserting all parsed data into Realm database
-        print("starting sqlitetest test")
         self.measure {
+            print("starting sqlite test")
             // measure performance of reading a csv into a duckdb instance
             // and dropping all the records.
             do {
@@ -287,6 +286,7 @@ extension Swift_benchmarksTests {
                 })
                 
                 let all_data = readCSV(inputFile: GetTaxiFileName(), separator: ",")
+                let start = DispatchTime.now()
                 for row in all_data {
                     let parsed_row = row.components(separatedBy: ",")
                     if (parsed_row.count < 24) {
@@ -319,15 +319,20 @@ extension Swift_benchmarksTests {
                         year                  <- Int(parsed_row[22]) ?? 0,
                         month                 <- Int(parsed_row[23]) ?? 0
                     )
-                    let rowid = try database.run(insert)
+                    try database.run(insert)
                 }
+                let end = DispatchTime.now()
+                let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
+                let timeInterval = Double(nanoTime) / 1_000_000_000
+                print("time to insert all records = \(timeInterval)")
                 // check the count
                 if (try database.scalar(trips.count) != 50000) {
                     print("error during sqlite3 ingestion")
                 }
                 // drop the table
-                let result = trips.drop(ifExists: true)
-                
+                let drop = trips.drop(ifExists: true)
+                try database.run(drop)
+                print("done sqllite test")
             } catch {
                 print("duckdb error \(error)")
                 exit(1)
